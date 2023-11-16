@@ -20,6 +20,7 @@ const Style = () => {
   
   #theme-simple #announcement-content {
     /* background-color: #f6f6f6; */
+    background-color: #fdf6e3;
   }
   
   #theme-simple .blog-item-title {
