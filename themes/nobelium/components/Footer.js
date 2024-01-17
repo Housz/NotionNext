@@ -26,9 +26,8 @@ export const Footer = (props) => {
        <div className="flex align-baseline justify-between flex-wrap">
          <p>
            © {BLOG.AUTHOR} {copyrightDate}
-          <i class="fa-brands fa-github"></i>
          </p>
-           
+           <Vercel />
        </div>
      </div>
    </footer>
