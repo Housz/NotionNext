@@ -79,6 +79,42 @@ jobs:
           })
           NODE
 
+
+      - name: Inspect with modern notion-client 7.12.1
+        run: |
+          mkdir -p /tmp/notion-modern
+          cd /tmp/notion-modern
+          npm init -y >/dev/null 2>&1
+          npm install --silent notion-client@7.12.1
+          node --input-type=module - <<'NODE'
+          import { NotionAPI } from 'notion-client'
+          const pageId = process.env.NOTION_PAGE_ID
+          const headers = {
+            'User-Agent': 'NotionNext (+https://github.com/notionnext-org/NotionNext)'
+          }
+          const api = new NotionAPI({
+            userTimeZone: 'Asia/Tokyo',
+            ofetchOptions: { headers },
+            kyOptions: { headers }
+          })
+          try {
+            const data = await api.getPage(pageId)
+            const blocks = data.block || {}
+            const collections = data.collection || {}
+            console.log('MODERN_BLOCK_COUNT', Object.keys(blocks).length)
+            console.log('MODERN_COLLECTION_IDS', JSON.stringify(Object.keys(collections)))
+            console.log('MODERN_COLLECTION_META', JSON.stringify(Object.entries(collections).map(([id, rec]) => ({
+              id,
+              name: rec?.value?.name || null,
+              schemaKeys: Object.values(rec?.value?.schema || {}).map(x => x?.name).filter(Boolean)
+            }))))
+            console.log('MODERN_COLLECTION_QUERY_KEYS', JSON.stringify(Object.keys(data.collection_query || {})))
+          } catch (err) {
+            console.error('MODERN_ERROR', err)
+            process.exitCode = 1
+          }
+          NODE
+
       - name: Build
         run: npm run build
         env:
