@@ -21,6 +21,46 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Inspect Notion root
+        run: |
+          node - <<'NODE'
+          const { NotionAPI } = require('notion-client')
+          const pageId = process.env.NOTION_PAGE_ID
+          const api = new NotionAPI({ userTimeZone: 'Asia/Tokyo' })
+          api.getPage(pageId, {
+            gotOptions: {
+              headers: {
+                'User-Agent': 'NotionNext (+https://github.com/notionnext-org/NotionNext)'
+              }
+            }
+          }).then(data => {
+            const clean = pageId.replace(/-/g, '')
+            const uuid = clean.replace(/^(........)(....)(....)(....)(............)$/, '$1-$2-$3-$4-$5')
+            const blocks = data.block || {}
+            const root = blocks[uuid]?.value
+            console.log('DIAG_ROOT_ID', uuid)
+            console.log('DIAG_ROOT_TYPE', root?.type)
+            console.log('DIAG_ROOT_TITLE', JSON.stringify(root?.properties?.title || null))
+            console.log('DIAG_ROOT_CONTENT', JSON.stringify(root?.content || []))
+            console.log('DIAG_COLLECTION_IDS', JSON.stringify(Object.keys(data.collection || {})))
+            console.log('DIAG_VIEW_IDS', JSON.stringify(Object.keys(data.collection_view || {})))
+            const candidates = Object.entries(blocks)
+              .filter(([, rec]) => ['collection_view','collection_view_page','page','link_to_page'].includes(rec?.value?.type))
+              .map(([id, rec]) => ({
+                id,
+                type: rec.value.type,
+                collection_id: rec.value.collection_id || null,
+                content: rec.value.content || null,
+                title: rec.value.properties?.title || null,
+                page_pointer: rec.value.page_pointer || null
+              }))
+            console.log('DIAG_CANDIDATES', JSON.stringify(candidates))
+          }).catch(err => {
+            console.error('DIAG_ERROR', err)
+            process.exitCode = 1
+          })
+          NODE
+
       - name: Build
         run: npm run build
         env:
