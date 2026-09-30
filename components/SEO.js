@@ -55,7 +55,7 @@ const SEO = props => {
   }, [hasWebFontUrl, webFontUrl])
 
   // SEO关键词
-  const KEYWORDS = siteConfig('KEYWORDS', BLOG.KEYWORDS, NOTION_CONFIG)
+  const KEYWORDS = siteConfig('KEYWORDS', null, NOTION_CONFIG)
   let keywords = meta?.tags || KEYWORDS
   if (post?.tags && post?.tags?.length > 0) {
     keywords = post?.tags?.join(',')
