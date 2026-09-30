@@ -26,3 +26,4 @@ jobs:
         env:
           VERCEL_ENV: preview
           NEXT_TELEMETRY_DISABLED: "1"
+          NOTION_PAGE_ID: "255d2f3d-f028-48b6-8420-6c3cd2062a14"
