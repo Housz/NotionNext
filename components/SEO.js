@@ -90,6 +90,7 @@ const SEO = props => {
   )
 
   const BLOG_FAVICON = siteConfig('BLOG_FAVICON', null, NOTION_CONFIG)
+  const ENABLE_RSS = siteConfig('ENABLE_RSS', true, NOTION_CONFIG)
   const pwaEnabled = siteConfig('PWA_ENABLE', false, NOTION_CONFIG)
   const pwaConfig = pwaEnabled
     ? getPwaConfig({ siteInfo, notionConfig: NOTION_CONFIG })
@@ -165,6 +166,14 @@ const SEO = props => {
 
       {/* 基础SEO元数据 */}
       <link rel='canonical' href={url} />
+      {ENABLE_RSS && (
+        <link
+          rel='alternate'
+          type='application/rss+xml'
+          title={`${siteInfo?.title || TITLE} RSS Feed`}
+          href={createSiteUrl(LINK, 'rss/feed.xml')}
+        />
+      )}
       <meta name='keywords' content={keywords} />
       <meta name='description' content={description} />
       <meta name='author' content={AUTHOR} />
@@ -291,6 +300,7 @@ export const generateStructuredData = (
     name: siteInfo?.title,
     description: siteInfo?.description,
     url: siteUrl,
+    inLanguage: siteConfig('LANG', 'zh-CN'),
     author: {
       '@type': 'Person',
       name: author
@@ -313,6 +323,7 @@ export const generateStructuredData = (
       headline: meta.title,
       description: meta.description,
       image: image,
+      inLanguage: siteConfig('LANG', 'zh-CN'),
       url: url,
       datePublished: meta.publishTime,
       dateModified: meta.modifiedTime || meta.publishTime,
