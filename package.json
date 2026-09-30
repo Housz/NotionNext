@@ -75,6 +75,6 @@
     "email": "tlyong1992@hotmail.com"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   }
 }
