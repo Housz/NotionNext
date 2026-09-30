@@ -55,7 +55,7 @@ const SEO = props => {
   }, [hasWebFontUrl, webFontUrl])
 
   // SEO关键词
-  const KEYWORDS = siteConfig('KEYWORDS')
+  const KEYWORDS = siteConfig('KEYWORDS', null, NOTION_CONFIG)
   let keywords = meta?.tags || KEYWORDS
   if (post?.tags && post?.tags?.length > 0) {
     keywords = post?.tags?.join(',')
@@ -66,7 +66,12 @@ const SEO = props => {
   }
   const TITLE = siteConfig('TITLE')
   const title = meta?.title || TITLE
-  const description = meta?.description || `${siteInfo?.description}`
+  const siteDescription = siteConfig(
+    'DESCRIPTION',
+    siteInfo?.description,
+    NOTION_CONFIG
+  )
+  const description = post?.summary || siteDescription || meta?.description || ''
   const type = meta?.type === 'Post' ? 'article' : meta?.type || 'website'
   const language =
     router?.locale || siteConfig('LANG', 'zh-CN', NOTION_CONFIG)
@@ -253,7 +258,14 @@ const SEO = props => {
         type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
-            generateStructuredData(meta, siteInfo, url, image, AUTHOR, LINK)
+            generateStructuredData(
+              { ...meta, description },
+              { ...siteInfo, description: siteDescription },
+              url,
+              image,
+              AUTHOR,
+              LINK
+            )
           )
         }}
       />
