@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NOTION_PAGE_ID: "255d2f3d-f028-48b6-8420-6c3cd2062a14"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,4 +68,3 @@ jobs:
         env:
           VERCEL_ENV: preview
           NEXT_TELEMETRY_DISABLED: "1"
-          NOTION_PAGE_ID: "255d2f3d-f028-48b6-8420-6c3cd2062a14"
