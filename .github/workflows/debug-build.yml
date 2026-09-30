@@ -101,12 +101,18 @@ jobs:
             const data = await api.getPage(pageId)
             const blocks = data.block || {}
             const collections = data.collection || {}
+            const clean = pageId.replace(/-/g, '')
+            const uuid = clean.replace(/^(........)(....)(....)(....)(............)$/, '$1-$2-$3-$4-$5')
+            const rootRec = blocks[uuid] || null
             console.log('MODERN_BLOCK_COUNT', Object.keys(blocks).length)
+            console.log('MODERN_ROOT_RECORD', JSON.stringify(rootRec))
+            console.log('MODERN_BLOCK_SAMPLE', JSON.stringify(Object.entries(blocks).slice(0, 12)))
             console.log('MODERN_COLLECTION_IDS', JSON.stringify(Object.keys(collections)))
+            console.log('MODERN_COLLECTION_RAW', JSON.stringify(collections))
             console.log('MODERN_COLLECTION_META', JSON.stringify(Object.entries(collections).map(([id, rec]) => ({
               id,
-              name: rec?.value?.name || null,
-              schemaKeys: Object.values(rec?.value?.schema || {}).map(x => x?.name).filter(Boolean)
+              name: rec?.value?.name || rec?.name || null,
+              schemaKeys: Object.values(rec?.value?.schema || rec?.schema || {}).map(x => x?.name).filter(Boolean)
             }))))
             console.log('MODERN_COLLECTION_QUERY_KEYS', JSON.stringify(Object.keys(data.collection_query || {})))
           } catch (err) {
