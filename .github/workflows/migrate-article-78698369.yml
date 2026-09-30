@@ -40,6 +40,35 @@ jobs:
           grep -o '<title[^>]*>[^<]*' wechat.html | head -1 || true
           grep -o 'var msg_title[^;]*' wechat.html | head -1 || true
 
+
+      - name: Download WeChat article images
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python - <<'PY'
+          import re, pathlib, urllib.request, html as htmlmod
+          src = pathlib.Path('wechat.html').read_text(encoding='utf-8', errors='ignore')
+          urls = re.findall(r'data-src="(https://mmbiz\.qpic\.cn/[^"]+)"', src)
+          out = pathlib.Path('wechat-images')
+          out.mkdir(exist_ok=True)
+          for i, raw in enumerate(urls):
+              url = htmlmod.unescape(raw)
+              ext = '.png' if 'wx_fmt=png' in url else '.jpg'
+              req = urllib.request.Request(
+                  url,
+                  headers={
+                      'User-Agent': 'Mozilla/5.0',
+                      'Referer': 'https://mp.weixin.qq.com/'
+                  }
+              )
+              with urllib.request.urlopen(req, timeout=30) as resp:
+                  data = resp.read()
+              path = out / f'{i:02d}{ext}'
+              path.write_bytes(data)
+              print(i, path, len(data), url)
+          PY
+          ls -lh wechat-images
+
       - name: Upload source pages
         uses: actions/upload-artifact@v4
         with:
@@ -49,4 +78,5 @@ jobs:
             csdn.headers.txt
             wechat.html
             wechat.headers.txt
+            wechat-images/
           retention-days: 1
