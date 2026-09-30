@@ -46,6 +46,22 @@ jobs:
             console.log('DIAG_ROOT_CONTENT', JSON.stringify(root?.content || []))
             console.log('DIAG_COLLECTION_IDS', JSON.stringify(Object.keys(data.collection || {})))
             console.log('DIAG_VIEW_IDS', JSON.stringify(Object.keys(data.collection_view || {})))
+            console.log('DIAG_COLLECTION_QUERY_KEYS', JSON.stringify(Object.keys(data.collection_query || {})))
+            console.log('DIAG_COLLECTION_QUERY', JSON.stringify(data.collection_query || {}))
+            console.log('DIAG_BLOCK_COUNT', Object.keys(blocks).length)
+            console.log('DIAG_BLOCK_SAMPLE', JSON.stringify(Object.entries(blocks).slice(0, 30).map(([id, rec]) => ({
+              id,
+              type: rec?.value?.type,
+              parent_id: rec?.value?.parent_id,
+              parent_table: rec?.value?.parent_table,
+              collection_id: rec?.value?.collection_id || null,
+              title: rec?.value?.properties?.title || null
+            }))))
+            console.log('DIAG_COLLECTION_META', JSON.stringify(Object.entries(data.collection || {}).map(([id, rec]) => ({
+              id,
+              name: rec?.value?.name || null,
+              schema: rec?.value?.schema || null
+            }))))
             const candidates = Object.entries(blocks)
               .filter(([, rec]) => ['collection_view','collection_view_page','page','link_to_page'].includes(rec?.value?.type))
               .map(([id, rec]) => ({
