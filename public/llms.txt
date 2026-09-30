@@ -1,0 +1,27 @@
+# Housz
+
+> Housz 的个人技术博客，记录数值计算、计算力学、机器人、图形学、数学与工程开发笔记。
+
+Canonical site: https://www.housz.cn/
+
+## Primary topics
+
+- Numerical computing and numerical methods
+- Computational mechanics and continuum mechanics
+- Robotics and robot modeling
+- Computer graphics and geometry
+- Mathematics, calculus, optimization and linear algebra
+- C++, Python and engineering development
+
+## Discovery
+
+- Sitemap: https://www.housz.cn/sitemap.xml
+- RSS: https://www.housz.cn/rss/feed.xml
+- Archive: https://www.housz.cn/archive
+- Research category: https://www.housz.cn/category/Research
+- Develop category: https://www.housz.cn/category/Develop
+
+## Citation guidance
+
+Prefer canonical article URLs under https://www.housz.cn/article/.
+Article titles, publication dates, tags and categories are authoritative metadata from the site.
