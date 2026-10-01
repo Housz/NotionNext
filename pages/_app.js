@@ -20,6 +20,7 @@ import ExternalPlugins from '@/components/ExternalPlugins'
 import PWAInstaller from '@/components/PWAInstaller'
 import SEO from '@/components/SEO'
 import { zhCN } from '@clerk/localizations'
+import { Analytics } from '@vercel/analytics/next'
 import dynamic from 'next/dynamic'
 // import { ClerkProvider } from '@clerk/nextjs'
 const ClerkProvider = dynamic(() =>
@@ -92,6 +93,7 @@ const MyApp = ({ Component, pageProps }) => {
         </GLayout>
         <PWAInstaller NOTION_CONFIG={pageProps?.NOTION_CONFIG} />
         <ExternalPlugins {...pageProps} />
+        {BLOG.ANALYTICS_VERCEL && <Analytics />}
       </GlobalContextProvider>
     </AppErrorBoundary>
   )
